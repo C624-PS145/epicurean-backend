@@ -28,3 +28,11 @@ router.get('/search', wisatakulinerController.searchWisataKuliner);
 
 router.get('/populer', wisatakulinerController.getwisatakulinerpopuler);
 
+
+//! Routes Review
+
+router.get('/bestreview', wisatakulinerController.getreviewsterbaik);
+
+router.post('/detailwisatakuliner/:id/ulasan',reviewController.createReview);
+
+module.exports = router;
