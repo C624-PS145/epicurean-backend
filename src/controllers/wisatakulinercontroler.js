@@ -2,7 +2,6 @@ const db = require('../config/db');
 const cloudinary = require('../config/cloudinaryConfig');
 const fs = require('fs');
 
-
 exports.createWisatakuliner = async (req, res) => {
   try {
     const {
@@ -70,6 +69,7 @@ exports.createWisatakuliner = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
 
 exports.getAllwisatakuliner = (req, res) => {
   const query = 'SELECT * FROM wisata_kuliner';
@@ -207,25 +207,6 @@ exports.backendgetWisatakulinerById = (req, res) => {
   });
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// !!!!!!!!!!!
-
-  
 
 exports.getwisatakulinerById = (req, res) => {
 
