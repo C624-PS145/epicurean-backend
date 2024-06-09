@@ -23,7 +23,7 @@ const upload = multer({
   { name: 'galeri2', maxCount: 1 },
   { name: 'galeri3', maxCount: 1 },
   { name: 'galeri4', maxCount: 1 },
-  
+  { name: 'gambar_artikel', maxCount: 1 },
 ]);
 
 // Check file type
