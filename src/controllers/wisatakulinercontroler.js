@@ -315,32 +315,39 @@ exports.getwisatakulinerpopuler = (req, res) => {
 
 
 
+
   exports.searchWisataKuliner = (req, res) => {
-    const { nama_tempat, kabupaten } = req.query;
-    
-    // Buat query pencarian
-    let searchQuery = `
-      SELECT *
-      FROM wisata_kuliner
-      WHERE 1=1
-    `;
+    const { nama_tempat, kabupaten, avg_rating, makanan } = req.query;
+    let baseQuery = 'SELECT wk.*, AVG(u.rating) as average_rating FROM wisata_kuliner wk';
+    let joinClause = ' LEFT JOIN ulasan u ON wk.id = u.wisata_kuliner_id';
+    let whereClause = ' WHERE 1=1';
+    let havingClause = '';
+    let params = [];
   
-    const queryParams = [];
+    if (makanan) {
+      joinClause += ' LEFT JOIN makanan m ON wk.id = m.wisata_kuliner_id';
+      whereClause += ' AND m.nama_makanan LIKE ?';
+      params.push(`%${makanan}%`);
+    }
   
-    // Tambahkan kondisi untuk pencarian berdasarkan nama_tempat jika ada
     if (nama_tempat) {
-      searchQuery += ' AND nama_tempat LIKE ?';
-      queryParams.push(`%${nama_tempat}%`);
+      whereClause += ' AND wk.nama_tempat LIKE ?';
+      params.push(`%${nama_tempat}%`);
     }
   
-    // Tambahkan kondisi untuk filter berdasarkan kabupaten jika ada
     if (kabupaten) {
-      searchQuery += ' AND kabupaten = ?';
-      queryParams.push(kabupaten);
+      whereClause += ' AND wk.kabupaten = ?';
+      params.push(kabupaten);
     }
   
-    // Lakukan pencarian di database
-    db.query(searchQuery, queryParams, (err, results) => {
+    if (avg_rating) {
+      havingClause = ' HAVING average_rating >= ?';
+      params.push(parseFloat(avg_rating));
+    }
+  
+    const finalQuery = `${baseQuery}${joinClause}${whereClause} GROUP BY wk.id${havingClause}`;
+  
+    db.query(finalQuery, params, (err, results) => {
       if (err) {
         console.error('Error:', err);
         return res.status(500).json({ message: 'Internal server error' });
@@ -348,6 +355,4 @@ exports.getwisatakulinerpopuler = (req, res) => {
       res.json(results);
     });
   };
-
-
-
+  
