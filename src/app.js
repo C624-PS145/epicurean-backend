@@ -3,6 +3,7 @@ const cors = require('cors');
 const wisatakulinerRoutes = require('./routes/routeswisatakuliner');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
+const db = require('./config/db'); // Mengimpor konfigurasi database
 
 dotenv.config();
 
