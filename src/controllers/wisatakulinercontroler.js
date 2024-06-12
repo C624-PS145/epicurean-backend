@@ -2,6 +2,7 @@ const db = require('../config/db');
 const cloudinary = require('../config/cloudinaryConfig');
 const fs = require('fs');
 
+
 exports.createWisatakuliner = async (req, res) => {
   try {
     const {
@@ -208,6 +209,25 @@ exports.backendgetWisatakulinerById = (req, res) => {
 };
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// !!!!!!!!!!!
+
+  
+
 exports.getwisatakulinerById = (req, res) => {
 
     const { id } = req.params;
@@ -313,46 +333,46 @@ exports.getwisatakulinerpopuler = (req, res) => {
     });
   };
 
+  
+exports.searchWisataKuliner = (req, res) => {
+  const { nama_tempat, kabupaten, avg_rating, makanan } = req.query;
+  let baseQuery = 'SELECT wk.*, AVG(u.rating) as average_rating FROM wisata_kuliner wk';
+  let joinClause = ' LEFT JOIN ulasan u ON wk.id = u.wisata_kuliner_id';
+  let whereClause = ' WHERE 1=1';
+  let havingClause = '';
+  let params = [];
+
+  if (makanan) {
+    joinClause += ' LEFT JOIN makanan m ON wk.id = m.wisata_kuliner_id';
+    whereClause += ' AND m.nama_makanan LIKE ?';
+    params.push(`%${makanan}%`);
+  }
+
+  if (nama_tempat) {
+    whereClause += ' AND wk.nama_tempat LIKE ?';
+    params.push(`%${nama_tempat}%`);
+  }
+
+  if (kabupaten) {
+    whereClause += ' AND wk.kabupaten = ?';
+    params.push(kabupaten);
+  }
+
+  if (avg_rating) {
+    havingClause = ' HAVING average_rating >= ?';
+    params.push(parseFloat(avg_rating));
+  }
+
+  const finalQuery = `${baseQuery}${joinClause}${whereClause} GROUP BY wk.id${havingClause}`;
+
+  db.query(finalQuery, params, (err, results) => {
+    if (err) {
+      console.error('Error:', err);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+    res.json(results);
+  });
+};
 
 
 
-  exports.searchWisataKuliner = (req, res) => {
-    const { nama_tempat, kabupaten, avg_rating, makanan } = req.query;
-    let baseQuery = 'SELECT wk.*, AVG(u.rating) as average_rating FROM wisata_kuliner wk';
-    let joinClause = ' LEFT JOIN ulasan u ON wk.id = u.wisata_kuliner_id';
-    let whereClause = ' WHERE 1=1';
-    let havingClause = '';
-    let params = [];
-  
-    if (makanan) {
-      joinClause += ' LEFT JOIN makanan m ON wk.id = m.wisata_kuliner_id';
-      whereClause += ' AND m.nama_makanan LIKE ?';
-      params.push(`%${makanan}%`);
-    }
-  
-    if (nama_tempat) {
-      whereClause += ' AND wk.nama_tempat LIKE ?';
-      params.push(`%${nama_tempat}%`);
-    }
-  
-    if (kabupaten) {
-      whereClause += ' AND wk.kabupaten = ?';
-      params.push(kabupaten);
-    }
-  
-    if (avg_rating) {
-      havingClause = ' HAVING average_rating >= ?';
-      params.push(parseFloat(avg_rating));
-    }
-  
-    const finalQuery = `${baseQuery}${joinClause}${whereClause} GROUP BY wk.id${havingClause}`;
-  
-    db.query(finalQuery, params, (err, results) => {
-      if (err) {
-        console.error('Error:', err);
-        return res.status(500).json({ message: 'Internal server error' });
-      }
-      res.json(results);
-    });
-  };
-  
