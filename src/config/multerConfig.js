@@ -1,18 +1,8 @@
 const multer = require('multer');
 const path = require('path');
 
-// Destination directory
-const uploadDir = path.join(__dirname, '../uploads/');
-
 // Set storage engine
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir); // Menggunakan direktori uploads/
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-  }
-});
+const storage = multer.memoryStorage(); // Menggunakan memory storage untuk menyimpan file sementara
 
 // Initialize upload
 const upload = multer({
