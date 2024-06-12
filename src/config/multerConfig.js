@@ -1,10 +1,13 @@
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
 // Set storage engine
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Menggunakan direktori relatif
+    const uploadDir = 'uploads/';
+    fs.mkdirSync(uploadDir, { recursive: true }); // Membuat direktori secara dinamis jika belum ada
+    cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
@@ -39,7 +42,7 @@ function checkFileType(file, cb) {
   if (mimetype && extname) {
     return cb(null, true);
   } else {
-    cb(new Error('Error: Images Only!')); // Ubah pesan error menjadi Error object
+    cb(new Error('Error: Images Only!'));
   }
 }
 
