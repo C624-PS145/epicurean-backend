@@ -1,12 +1,10 @@
+// config/multerConfig.js
 const multer = require('multer');
 const path = require('path');
 
-// Destination directory
-const uploadDir = path.join(__dirname, './uploads/');
-
 // Set storage engine
 const storage = multer.diskStorage({
-  destination: uploadDir, // Menentukan direktori langsung
+  destination: './uploads/',
   filename: function (req, file, cb) {
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   }
@@ -15,7 +13,7 @@ const storage = multer.diskStorage({
 // Initialize upload
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // Batas ukuran file 5MB (sesuaikan sesuai kebutuhan)
+  limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB (adjust as needed)
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   }
@@ -40,8 +38,10 @@ function checkFileType(file, cb) {
   if (mimetype && extname) {
     return cb(null, true);
   } else {
-    cb(new Error('Error: Images Only!'));
+    cb('Error: Images Only!');
   }
 }
 
 module.exports = upload;
+
+
