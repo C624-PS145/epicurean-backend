@@ -2,7 +2,7 @@ const multer = require('multer');
 const path = require('path');
 
 // Destination directory
-const uploadDir = path.join(__dirname, '../uploads/');
+const uploadDir = path.join(__dirname, './uploads/');
 
 // Set storage engine
 const storage = multer.diskStorage({
