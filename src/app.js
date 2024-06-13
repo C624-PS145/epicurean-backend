@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
-app.get('/favicon.ico', (req, res) => res.status(204));
+app.get('../public/', (req, res) => res.status(204));
 
 app.use('/api', wisatakulinerRoutes);
 
