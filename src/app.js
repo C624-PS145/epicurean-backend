@@ -18,6 +18,12 @@ app.use('/uploads', express.static('uploads'));
 
 app.use('/api', wisatakulinerRoutes);
 
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
