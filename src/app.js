@@ -3,7 +3,7 @@ const cors = require('cors');
 const wisatakulinerRoutes = require('./routes/routeswisatakuliner');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
-const db = require('./config/db'); 
+const db = require('./config/db'); // Mengimpor konfigurasi database
 const path = require('path'); 
 
 dotenv.config();
@@ -18,6 +18,14 @@ app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
 app.use('/api', wisatakulinerRoutes);
+
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+
+
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
