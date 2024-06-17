@@ -1,0 +1,1 @@
+Dalam pengerjaan backend juga dilakukan oleh rekan satu tim saya yaitu hikmal namun karena beberapa aktivitas urgent di kampus sehinggga untuk commit saya ambil alih jadi meskipun riwayat commit saya yohanpermana namun pekerjaan juga dilakukan oleh hikmal 
